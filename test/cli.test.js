@@ -15,6 +15,7 @@
 import { suite } from 'uvu'
 import * as assert from 'uvu/assert'
 import '../build/globals.js'
+import { isNodeEighteenOrGreaterThanEighteen } from './utils/test-utils.js'
 
 const test = suite('cli')
 
@@ -97,12 +98,18 @@ test('supports `--prefix` flag ', async () => {
 })
 
 test('scripts from https', async () => {
+  if (!isNodeEighteenOrGreaterThanEighteen) {
+    return true;
+  }
   $`cat ${path.resolve('test/fixtures/echo.http')} | nc -l 8080`
   let out = await $`node build/cli.js http://127.0.0.1:8080/echo.mjs`
   assert.match(out.stderr, 'test')
 })
 
 test('scripts from https not ok', async () => {
+  if (!isNodeEighteenOrGreaterThanEighteen) {
+    return true;
+  }
   $`echo $'HTTP/1.1 500\n\n' | nc -l 8081`
   let out = await $`node build/cli.js http://127.0.0.1:8081`.nothrow()
   assert.match(out.stderr, "Error: Can't get")
