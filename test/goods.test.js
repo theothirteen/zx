@@ -16,7 +16,7 @@ import chalk from 'chalk'
 import { suite } from 'uvu'
 import * as assert from 'uvu/assert'
 
-import { isNodeEighteenOrGreaterThanEighteen } from './utils/test-utils.js'
+import { isNativeFetchExists } from './utils/test-utils.js'
 import '../build/globals.js'
 
 const test = suite('goods')
@@ -50,9 +50,9 @@ test('globby available', async () => {
 })
 
 test('fetch() works', async () => {
-  if(!isNodeEighteenOrGreaterThanEighteen){
-   return true; 
-  }  
+  if (!isNativeFetchExists) {
+    return true
+  }
   assert.match(
     await fetch('https://medv.io').then((res) => res.text()),
     /Anton Medvedev/
